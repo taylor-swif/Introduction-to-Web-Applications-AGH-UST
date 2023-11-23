@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #363062;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .product-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin: 20px;
+        }
+
+        li {
+            width: 300px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #fff;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        li:hover {
+            transform: scale(1.05);
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .product-info {
+            padding: 10px;
+        }
+
+        h3 {
+            margin: 0 0 10px;
+            font-size: 1.2em;
+        }
+
+        p {
+            margin: 0 0 10px;
+            color: #555;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #ff5733;
+        }
+        button {
+            background-color: #435585;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .filter-section {
+            margin: 20px;
+            text-align: center;
+        }
+
+        input[type="range"] {
+            width: 80%;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 10px;
+            margin: 10px;
+            cursor: pointer;
+            background-color: #435585;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #435585;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Product List</h1>
+</header>
+
+<div class="filter-section">
+    <label for="minPrice">Min Price:</label>
+    <input type="number" id="minPrice" min="0">
+
+    <label for="maxPrice">Max Price:</label>
+    <input type="number" id="maxPrice" min="0">
+
+    <button onclick="filterProducts()">Apply Filter</button>
+</div>
+
+<button onclick="sortProducts('asc')">Sort by Price (Low to High)</button>
+<button onclick="sortProducts('desc')">Sort by Price (High to Low)</button>
+<button onclick="sortProducts('nosort')">No sorting</button>
+
+<ul id="productList" class="product-list"></ul>
+
+<script>
+
+    let productsData, workingData;
+
+    let ascendingOrder = true;
+    function generateElement(product) {
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `
+            <img src="${product.images[0]}" alt="Product Icon">
+            <div class="product-info">
+                <h3>${product.title}</h3>
+                <p>${product.description}</p>
+                <p class="price">Price: ${product.price}</p>
+            </div>
+        `;
+        return listItem;
+    }
+
+    const productList = document.getElementById('productList');
+    const sortButton = document.getElementById('sortButton');
+
+    function filterProducts() {
+        const minPriceInput = document.getElementById('minPrice');
+        const maxPriceInput = document.getElementById('maxPrice');
+
+        const minPrice = parseInt(minPriceInput.value) || 0;
+        const maxPrice = parseInt(maxPriceInput.value) || Infinity;
+
+        const filteredList = productsData.filter(product => product.price >= minPrice && product.price <= maxPrice);
+        workingData = filteredList;
+        renderProducts(filteredList);
+    }
+
+
+    function sortProducts(order) {
+        let sortedList = [...workingData];
+
+        if (order === 'asc') {
+            sortedList.sort((a, b) => a.price - b.price);
+        } else if (order === 'desc') {
+            sortedList.sort((a, b) => b.price - a.price);
+        } else if (order === 'nosort') {
+            sortedList = workingData = productsData;
+
+        }
+
+        renderProducts(sortedList);
+    }
+
+    function renderProducts(products) {
+        productList.innerHTML = '';
+
+        for (let i = 0; i < 30; i++) {
+            const currProduct = products[i];
+            const element = generateElement(currProduct);
+            productList.appendChild(element);
+        }
+    }
+
+
+    fetch('https://dummyjson.com/products')
+        .then(res => res.json())
+        .then(data => {
+            productsData = workingData = data.products;
+            renderProducts(productsData);
+
+        });
+</script>
+
+</body>
+</html>
