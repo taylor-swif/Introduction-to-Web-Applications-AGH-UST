@@ -1,0 +1,59 @@
+body {
+    margin: 0;
+    padding: 0;
+    cursor: url('aim.png') 50 50, auto;
+}
+p {
+    font-size: 70px;
+    color: white;
+    font-weight: bold;
+    font-family: Tahoma, serif;
+}
+
+#score {
+    position: absolute;
+    right: 100px;
+    top: 40px;
+    font-size: 70px;
+    color: white;
+    font-weight: bold;
+    font-family: Tahoma, serif;
+}
+
+.zombie {
+    background: url(walkingdead.png);
+    background-position: 0 0;
+    position: absolute;
+    height: 312px;
+    width: 200px;
+    left: 110%;
+    bottom: 0;
+}
+#map {
+    background-image: url(board-bg.jpg);
+    background-position: center;
+    height: 100vh;
+    min-height: 800px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    text-align: center;
+}
+.hp {
+    display: flex;
+    justify-items: center;
+}
+.heart {
+    background-image: url(full_heart.png);
+    background-size: 150px 150px;
+    margin: 10px;
+    height: 150px;
+    width: 150px;
+}
+#startBtn {
+    margin-top: 70px;
+    font-size: 70px;
+    background-color: transparent;
+    border-radius: 10px;
+    border: 2px solid black;
+}
